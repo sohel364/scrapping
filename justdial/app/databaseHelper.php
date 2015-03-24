@@ -8,7 +8,7 @@ class databaseHelper
          public  $host = 'localhost';
          public  $user = 'root';
          public  $pass = '';
-         public  $db = 'indiamart';
+         public  $db = 'justdial';
 
   
      
