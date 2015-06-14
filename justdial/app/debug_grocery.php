@@ -3,7 +3,7 @@ set_time_limit(0);
 include_once 'databaseHelper.php';
 include_once('../simple_html_dom.php');
 
-$query = "SELECT `id` FROM `jd_entertainment_op_date_time`";
+$query = "SELECT `id` FROM `jd_apparels_op_date_time`";
 
 //echo $query;
 //echo '</br>';
@@ -34,16 +34,16 @@ foreach ($dataAddress as $item){
 
 
 
-for($i=660;$i<1783;$i++){
+for($i=1;$i<14551;$i++){
 		if(!in_array("$i",$IndexArr)){
 			
 			echo $i;
 			
-			$sql="SELECT `itemurl` FROM `jd_entertainment` WHERE `id`='$i'";
-			//echo $sql;
+			$sql="SELECT `itemurl` FROM `jd_apparels` WHERE `id`='$i'";
+			echo $sql;
 			echo "</br>";
 			
-			//GiveMeQueryIwillFixIT($sql,$i);
+			GiveMeQueryIwillFixIT($sql,$i);
 		}
 	}
 	
@@ -56,31 +56,28 @@ function GiveMeQueryIwillFixIT($sql,$id){
 	echo "<pre>";
 		print_r($urlData);
 	echo "</pre>";
-	
+	if($urlData[1][0]!=null){
 	echo GetInnserData($urlData[1][0],$id);
+	}
 }
-
-
-
 
 
 function GetInnserData($siteURL,$insertedID) {
 		//sleep(5);
-		
-		echo $siteURL;		
-		echo "</br>";
-		
-		try{
 		$tt = file_get_html($siteURL);
-		echo $tt;
-		}
-		catch (Exception $e) {
 		
-		}
+		//echo $tt;
+		//echo "</br>";
+		
+		//echo $siteURL;
 		
 		//sleep(10);
 		$tmpID=$insertedID;
 		$websiteOfItem="";
+		//div[class=hReview-aggregate] 
+		
+		if($tt!=null){
+		
 		foreach ($tt->find(
 				'section[class=jw] 
 					section[class=jdlc] 
@@ -104,7 +101,7 @@ function GetInnserData($siteURL,$insertedID) {
 
 					foreach ($rowData as $rdata){
 						$exploded = explode(": ",$rdata[0]);//jd_grocery_op_date_time
-						$sqlInnerData='INSERT INTO  `jd_entertainment_op_date_time` (`days`, `duration`, `id`) VALUES ("'.safe($exploded[0]).'","'.safe($exploded[1]).'","'.safe($tmpID).'")';
+						$sqlInnerData='INSERT INTO  `jd_apparels_op_date_time` (`days`, `duration`, `id`) VALUES ("'.safe($exploded[0]).'","'.safe($exploded[1]).'","'.safe($tmpID).'")';
 						$dataBaseHelper = new databaseHelper();
 						$insertedID=$dataBaseHelper->ExecuteInsertReturnID($sqlInnerData);
 						echo $sqlInnerData.'</br>';
@@ -144,10 +141,15 @@ function GetInnserData($siteURL,$insertedID) {
 				}
 				
 //				echo "source :".$siteURL.'</br>';
-				echo "ID :".$tmpID.":".$websiteOfItem.'</br>';
+//				echo "ID :".$tmpID.":".$websiteOfItem.'</br>';
 				return $websiteOfItem;
 }
 
+else {
+	echo "ID :".$insertedID."Something went wrong with this url :" .$siteURL."</br>";
+}
+
+}
 
 function safe($value){
 	return mysql_real_escape_string($value);

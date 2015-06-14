@@ -2,8 +2,8 @@
 set_time_limit(0);
 include_once('../simple_html_dom.php');
 include_once 'databaseHelper.php';
-$dbname="jd_entertainment";
-$dbopoption="jd_entertainment_op_date_time";
+$dbname="jd_apparels";
+$dbopoption=" jd_apparels_op_date_time";
 
 //MapToLongitudeLatitude($dbname);
 AddressToPin($dbname);
@@ -13,7 +13,7 @@ AddressToPin($dbname);
 	
 function AddressToPin($dbname){
 
-	$query = "SELECT `id`,`address`,`itemurl` FROM $dbname where `id`>2520";
+	$query = "SELECT `id`,`address`,`itemurl` FROM $dbname where `id`>11843";
 	echo $query."</br>";
 	
 	$db_bitch = new databaseHelper();
@@ -64,6 +64,9 @@ function GetInnserData($siteURL,$insertedID) {
 		$tmpID=$insertedID;
 		$websiteOfItem="";
 		//div[class=hReview-aggregate] 
+		
+		if($tt!=null){
+		
 		foreach ($tt->find(
 				'section[class=jw] 
 					section[class=jdlc] 
@@ -87,7 +90,7 @@ function GetInnserData($siteURL,$insertedID) {
 
 					foreach ($rowData as $rdata){
 						$exploded = explode(": ",$rdata[0]);//jd_grocery_op_date_time
-						$sqlInnerData='INSERT INTO  `jd_entertainment_op_date_time` (`days`, `duration`, `id`) VALUES ("'.safe($exploded[0]).'","'.safe($exploded[1]).'","'.safe($tmpID).'")';
+						$sqlInnerData='INSERT INTO  `jd_apparels_op_date_time` (`days`, `duration`, `id`) VALUES ("'.safe($exploded[0]).'","'.safe($exploded[1]).'","'.safe($tmpID).'")';
 						$dataBaseHelper = new databaseHelper();
 						$insertedID=$dataBaseHelper->ExecuteInsertReturnID($sqlInnerData);
 						echo $sqlInnerData.'</br>';
@@ -129,6 +132,12 @@ function GetInnserData($siteURL,$insertedID) {
 //				echo "source :".$siteURL.'</br>';
 //				echo "ID :".$tmpID.":".$websiteOfItem.'</br>';
 				return $websiteOfItem;
+}
+
+else {
+	echo "ID :".$insertedID."Something went wrong with this url :" .$siteURL."</br>";
+}
+
 }
 	
 	

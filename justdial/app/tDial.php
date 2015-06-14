@@ -4,11 +4,33 @@ include_once('../simple_html_dom.php');
 include_once 'databaseHelper.php';
 include_once 'clsJDItem.php';
 
-$table_name="jd_entertainment";
-$table_name_opdtm="jd_entertainment_op_date_time";
 
-for($itr=1;$itr<20;$itr++){	
-	 	$url ='http://www.justdial.com/Delhi-NCR/Farm-House-On-Hire/ct-467586/page-'.$itr.'';
+// CAD failed
+$TargetArray= ["http://www.justdial.com/Delhi-NCR/Wedding-Gown-Retailers/ct-154515",
+"http://www.justdial.com/Delhi-NCR/Blouse-Retailers/ct-24960"];
+
+
+//echo "<pre>";
+	//print_r($TargetArray);
+//echo "</pre>";
+//return;
+
+foreach($TargetArray as $item){
+	
+	echo $item."</br>";
+	echo "<hr></br>";
+	//echo get_string_between($item,"Delhi-NCR/","/ct")."</br>";
+	$institute=get_string_between($item,"Delhi-NCR/","/ct");
+	//$agent="NA";
+
+
+
+
+$table_name="jd_apparels";
+$table_name_opdtm="jd_apparels_op_date_time";
+
+for($itr=1;$itr<21;$itr++){	
+	 	$url =$item.'/page-'.$itr;
 		$innerHtml = file_get_html($url);
 		
 //		sleep(10);
@@ -21,8 +43,9 @@ for($itr=1;$itr<20;$itr++){
 				
 		$hotelObject= NULL;
 		$arrayOfHotelInfo = array();
-		$cat="Entertainment";
-		$subcat="Farm-House-On-Hire";
+		$cat="Apparel";
+		$subcat="Ladies-Suit";
+		
 		
 		foreach ($tt->find('section[class=rslwrp] section[class=jbbg]') as $block){	
 				//echo $block;
@@ -188,7 +211,7 @@ for($itr=1;$itr<20;$itr++){
 	
 			$sql='INSERT INTO `justdial`.'.$table_name.'(`id`,`name`,`contact`, 
 			`site`,`address`,`pincode`, `since`, `rating`, `mapdata`,`longitude`,
-			`latitude`,`img`,`category`,`subcategory`,`itemurl`) 
+			`latitude`,`img`,`category`,`subcategory`,`institute`,`itemurl`) 
 			VALUES (NULL,"'.safe($hotel->getName()).'",
 			"'.safe($hotel->getContact()).'",
 			"'.safe($hotel->getSite()).'",
@@ -202,6 +225,7 @@ for($itr=1;$itr<20;$itr++){
 			"'.safe($hotel->getImg()).'",
 			"'.safe($hotel->getCategory()).'",
 			"'.safe($subcat).'",
+			"'.safe($institute).'",
 			"'.safe($hotel->getItemURL()).'")';
 			
 			echo $sql.'<br>';			
@@ -218,6 +242,7 @@ for($itr=1;$itr<20;$itr++){
 			//$dataBaseHelper->ExecuteNonQuery($updateSQL);
 	    }
 		
+ }
 }
 
 //No more in use now
